@@ -98,22 +98,41 @@ export default function Page() {
             </Form>
           </div>
         </div>
-        <div className="__output min-h-[300px] lg:min-h-full lg:h-full flex-[1] bg-white/5 rounded-lg relative overflow-hidden">
-          {outputImg ? (
-            <Image
-              alt="output"
-              className="w-full h-full object-contain"
-              src={outputImg}
-              width={300}
-              height={300}
-            />
-          ) : (
-            <>
-              <div className="w-full h-full flex justify-center items-center text-white/70 text-center p-3">
-                Enter your prompt and hit generate!
+        <div>
+
+          <div className="__output min-h-[300px] lg:min-h-full lg:h-full flex-[1] bg-white/5 rounded-lg relative overflow-hidden">
+            {outputImg ? (
+              <div>
+                <Image
+                  alt="output"
+                  className="w-full h-full object-contain"
+                  src={outputImg}
+                  width={300}
+                  height={300}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const link = document.createElement("a");
+                    link.href = outputImg;
+                    link.download = "generated-image.png";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                >
+                  Click to Download
+                </button>
               </div>
-            </>
-          )}
+            ) : (
+              <>
+                <div className="w-full h-full flex justify-center items-center text-white/70 text-center p-3">
+                  Enter your prompt and hit generate!
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
