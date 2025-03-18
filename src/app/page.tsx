@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import Link from "next/link";
-import Create from "./create/page";
 
 export default function Home() {
   return (

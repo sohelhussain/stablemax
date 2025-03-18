@@ -9,10 +9,10 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),          
+    }),
   ],
   callbacks: {
-    async session({ session }: { session: any }) {
+    async session({ session }) {
       const user = await prisma.user.findUnique({
         where: { email: session.user?.email || "" },
       });
