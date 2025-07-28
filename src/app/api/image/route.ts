@@ -6,21 +6,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 
-    const session = await getServerSession(authOptions);
+    // const session = await getServerSession(authOptions);
     
-    if (!session) {
-        return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
-    }
+    // if (!session) {
+    //     return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
+    // }
     const {prompt} = await request.json();
 
-    const user = await prisma.user.findUnique({
-        where: {
-            id: session.user.id
-        }
-    })
-    if (!user) {
-        return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
-    }
+    // const user = await prisma.user.findUnique({
+    //     where: {
+    //         id: session.user.id
+    //     }
+    // })
+    // if (!user) {
+    //     return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
+    // }
 
     function generateRandomNumber(): number {
         return Math.floor(Math.random() * 100000) + 1;
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     await prisma.post.create({
         data:{
             prompt: prompt,
-            userId: user.id,
+            // userId: user.id,
             url: imageUrl,
             seed: randomSeed
         }
@@ -45,28 +45,28 @@ export async function POST(request: NextRequest) {
 };
 
 
-export async function GET() {
-    const session = await getServerSession(authOptions);
+// export async function GET() {
+    // const session = await getServerSession(authOptions);
 
-    if (!session) {
-        return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
-    }
+    // if (!session) {
+    //     return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
+    // }
 
-    const user = await prisma.user.findUnique({
-        where: {
-            id: session.user.id
-        }
-    })
+//     const user = await prisma.user.findUnique({
+//         where: {
+//             id: session.user.id
+//         }
+//     })
 
-    if (!user) {
-        return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
-    }
+//     if (!user) {
+//         return NextResponse.json({ error: "You must be logged in to do this!" }, { status: 401 });
+//     }
 
-    const posts = await prisma.post.findMany({
-        where: {
-            userId: user.id
-        }
-    })
+//     const posts = await prisma.post.findMany({
+//         where: {
+//             userId: user.id
+//         }
+//     })
 
-    return NextResponse.json(posts);
-}
+//     return NextResponse.json(posts);
+// }
