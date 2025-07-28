@@ -37,24 +37,38 @@ export default function Page() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+  try {
+    setLoading(true);
+
+    const response = await fetch("/api/image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    let data;
     try {
-      setLoading(true);
-      const response = await fetch("/api/image", {
-        method: "POST",
-        body: JSON.stringify(values),
-      });
-      const data = await response.json();
-      if (response.status === 200) {
-        setOutputImg(data.url);
-      } else {
-        toast(data.error);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+      data = await response.json();
+    } catch {
+      toast("Invalid server response");
+      return;
     }
+
+    if (response.ok) {
+      setOutputImg(data.url);
+    } else {
+      toast(data.error || "Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    toast("Unexpected error occurred");
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <div className="w-full p-3 min-h-dvh h-full flex justify-start items-center pt-[72px] flex-col">
@@ -110,7 +124,7 @@ export default function Page() {
                   width={300}
                   height={300}
                 />
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     const link = document.createElement("a");
@@ -123,7 +137,7 @@ export default function Page() {
                   className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
                 >
                   Click to Download
-                </button>
+                </button> */}
               </div>
             ) : (
               <>
