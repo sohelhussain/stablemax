@@ -1,6 +1,6 @@
-import { authOptions } from "@/utils/authOptions";
+// import { authOptions } from "@/utils/authOptions";
 import prisma from "@/utils/prisma";
-import { getServerSession } from "next-auth";
+// import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 
