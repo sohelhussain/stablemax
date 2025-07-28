@@ -6,36 +6,29 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { prompt } = await request.json();
+    const body = await request.json();
+    const prompt = body.prompt;
 
     if (!prompt || typeof prompt !== "string") {
       return NextResponse.json({ error: "Invalid prompt" }, { status: 400 });
     }
 
-    const generateRandomNumber = () => Math.floor(Math.random() * 100000) + 1;
-    const randomSeed = generateRandomNumber();
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=${randomSeed}&width=1050&height=1050&nologo=True`;
+    const randomSeed = Math.floor(Math.random() * 100000) + 1;
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
+      prompt
+    )}?seed=${randomSeed}&width=1050&height=1050&nologo=True`;
 
-    // Optionally check if image is reachable
-    const imageResponse = await fetch(imageUrl);
-    if (!imageResponse.ok) {
-      return NextResponse.json({ error: "Failed to fetch image" }, { status: 502 });
+    const imgResp = await fetch(imageUrl);
+    if (!imgResp.ok) {
+      return NextResponse.json({ error: "Image generation failed" }, { status: 502 });
     }
 
-    // Save to DB
-    await prisma.post.create({
-      data: {
-        prompt,
-        url: imageUrl,
-        seed: randomSeed,
-      },
-    });
+    // ❌ Remove Prisma-related DB call here
 
-    return NextResponse.json({ message: "Image created successfully", url: imageUrl }, { status: 200 });
-
+    return NextResponse.json({ message: "Image created", url: imageUrl });
   } catch (error) {
-    console.error("POST /api/image error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.error("❌ /api/image error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
